@@ -1,5 +1,7 @@
+import 'package:atv2_avaliativa/models/item.dart';
 import 'package:atv2_avaliativa/screens/tela_cadastro.dart';
 import 'package:atv2_avaliativa/screens/tela_carrinho.dart';
+import 'package:atv2_avaliativa/screens/tela_item.dart';
 import 'package:flutter/material.dart';
 
 List<Item> allitems = [];
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -76,12 +80,13 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: Icon(Icons.shopping_cart),
               title: const Text('Carrinho'),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                Navigator.push(
+                await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const TelaCarrinho()),
                 );
+                refresh();
               },
             ),
           ],
@@ -99,27 +104,39 @@ class _HomePageState extends State<HomePage> {
           return Card(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(item.name),
-                Text('\$${item.price.toStringAsFixed(2)}'),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      cartItems.add(item);
-                    });
+                GestureDetector(
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TelaItem(item: item)),
+                    );
+                    refresh();
                   },
-                  child: Text('Adicionar ao Carrinho'),
+                  child: Image.network(
+                    item.imagemUrl,
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
+                Text(item.nome),
+                Text('\$${item.preco.toStringAsFixed(2)}'),
               ],
             ),
           );
         },
       ),
-    );
-  }
-}
-
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const TelaCarrinho()),
+          );
+          refresh();
+        },
+        child: const Icon(Icons.shopping_cart),
       ),
     );
   }

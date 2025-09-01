@@ -1,8 +1,8 @@
 class Item {
-  String? nome;
-  String? descricao;
-  double? preco;
-  String? imagemUrl;
+  String nome;
+  String descricao;
+  double preco;
+  String imagemUrl;
 
   Item({
     required this.nome,
